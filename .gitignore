@@ -422,3 +422,5 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+/src/BeautyInBloom.API/appsettings.Development.json
+/src/BeautyInBloom.API/appsettings.Production.json
