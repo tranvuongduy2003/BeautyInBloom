@@ -1,0 +1,75 @@
+version: '3.8'
+
+services:
+  # client
+  bnb.client:
+    container_name: bnb.client
+    volumes:
+      - ./src:/app/src
+    ports:
+      - 3000:3000
+    restart: always 
+
+  # redis cache
+  bnb.cache:
+    container_name: bnb.cache
+    restart: always
+    ports:
+      - "6379:6379"
+
+  # postgresql
+  bnb.db:
+    container_name: bnb.db
+    environment:
+    - POSTGRES_USER=admin
+    - POSTGRES_PASSWORD=08042003
+    - POSTGRES_DB=BeautyInBloomDB
+    restart: always
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgressql/data
+
+  # infrastructure section
+  elasticsearch:
+    container_name: elasticsearch
+    environment:
+      - xpack.monitoring.enabled=true
+      - xpack.watcher.enabled=false
+      - xpack.security.enabled=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - discovery.type=single-node
+      # - ELASTIC_USERNAME=elastic #default username
+      - ELASTIC_PASSWORD=admin
+    ports:
+      - "9200:9200"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+
+  kibana:
+    container_name: kibana
+    environment:
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+      - ELASTICSEARCH_USERNAME=elastic
+      - ELASTICSEARCH_PASSWORD=admin
+    depends_on:
+      - elasticsearch
+    ports:
+      - "5601:5601"
+
+  # api sections
+  bnb.api:
+    container_name: bnb.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:80
+      - "ConnectionStrings:DefaultConnectionString=Server=bnb.db;Port=5432;Database=BeautyInBloomDB;User Id=admin;Password=08042003"
+      - "ConnectionStrings:RedisCache=bnb.cache:6379"
+      - "ElasticConfiguration:Uri=http://elasticsearch:9200"
+    depends_on:
+      - bnb.db
+      - bnb.cache
+      - elasticsearch
+    ports:
+      - "8002:80"
+    restart: always
