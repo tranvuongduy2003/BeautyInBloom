@@ -1,17 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using BeautyInBloom.API.Data.EntityBases;
 
 namespace BeautyInBloom.API.Data.Entities;
 
 [Table("Commands")]
-public class Command
+public class Command : EntityBase<string>
 {
-    [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    [MaxLength(50)]
-    [Column(TypeName = "varchar(50)")]
-    public string Id { get; set; }
-
     [Required]
     [MaxLength(50)]
     [Column(TypeName = "nvarchar(50)")]

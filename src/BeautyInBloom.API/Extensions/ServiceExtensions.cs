@@ -15,6 +15,8 @@ using Microsoft.OpenApi.Models;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using BeautyInBloom.API.Repositories;
+using BeautyInBloom.API.Repositories.Contracts;
 
 namespace BeautyInBloom.API.Extentions;
 
@@ -201,7 +203,9 @@ public static class ServiceExtensions
             .AddTransient<ITokenService, TokenService>()
             .AddTransient<ICacheService, CacheService>()
             .AddTransient<ISerializeService, SerializeService>()
-            .AddScoped(typeof(IRepositoryQueryBase<,,>), typeof(RepositoryQueryBase<,,>))
-            .AddScoped(typeof(IRepositoryBase<,,>), typeof(RepositoryBase<,,>))
-            .AddScoped(typeof(IUnitOfWork<>), typeof(UnitOfWork<>));
+            .AddScoped(typeof(IRepositoryQueryBase<,>), typeof(RepositoryQueryBase<,>))
+            .AddScoped(typeof(IRepositoryBase<,>), typeof(RepositoryBase<,>))
+            .AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork))
+            .AddScoped<IFunctionsRepository, FunctionsRepository>()
+            .AddScoped<ICommandsRepository, CommandsRepository>();
 }

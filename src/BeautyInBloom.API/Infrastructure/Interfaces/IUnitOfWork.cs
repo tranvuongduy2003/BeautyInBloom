@@ -1,8 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿namespace BeautyInBloom.API.Infrastructure.Interfaces;
 
-namespace BeautyInBloom.API.Infrastructure.Interfaces;
-
-public interface IUnitOfWork<TContext> : IDisposable where TContext : DbContext
+public interface IUnitOfWork : IDisposable
 {
     Task<int> CommitAsync();
 }

@@ -42,9 +42,11 @@ public class ApplicationDbContext : IdentityDbContext<User>
         builder.Entity<Role>().Property(x => x.Id).HasMaxLength(50).IsUnicode(false);
         builder.Entity<Command>().Property(x => x.Id).HasMaxLength(50).IsUnicode(false);
         builder.Entity<Function>().Property(x => x.Id).HasMaxLength(50).IsUnicode(false);
-
-
-        #region Many-to-many
+        builder.Entity<Brand>().Property(x => x.Id).HasMaxLength(50).IsUnicode(false);
+        builder.Entity<Category>().Property(x => x.Id).HasMaxLength(50).IsUnicode(false);
+        builder.Entity<Order>().Property(x => x.Id).HasMaxLength(50).IsUnicode(false);
+        builder.Entity<OrderItem>().Property(x => x.Id).HasMaxLength(50).IsUnicode(false);
+        builder.Entity<Product>().Property(x => x.Id).HasMaxLength(50).IsUnicode(false);
 
         builder.Entity<CommandInFunction>()
             .HasOne(x => x.Function)
@@ -54,6 +56,29 @@ public class ApplicationDbContext : IdentityDbContext<User>
             .HasOne(x => x.Command)
             .WithMany(x => x.CommandInFunctions)
             .HasForeignKey(x => x.CommandId);
+        
+        builder.Entity<Product>()
+            .HasOne(x => x.Brand)
+            .WithMany(x => x.Products)
+            .HasForeignKey(x => x.BrandId);
+        builder.Entity<Product>()
+            .HasOne(x => x.Category)
+            .WithMany(x => x.Products)
+            .HasForeignKey(x => x.CategoryId);
+        
+        builder.Entity<OrderItem>()
+            .HasOne(x => x.Product)
+            .WithMany(x => x.OrderItems)
+            .HasForeignKey(x => x.ProductId);
+        builder.Entity<OrderItem>()
+            .HasOne(x => x.Order)
+            .WithMany(x => x.OrderItems)
+            .HasForeignKey(x => x.OrderId);
+        
+        builder.Entity<Order>()
+            .HasOne(x => x.User)
+            .WithMany(x => x.Orders)
+            .HasForeignKey(x => x.UserId);
 
         builder.Entity<Permission>()
             .HasOne(x => x.Function)
@@ -67,8 +92,6 @@ public class ApplicationDbContext : IdentityDbContext<User>
             .HasOne(x => x.Command)
             .WithMany(x => x.Permissions)
             .HasForeignKey(x => x.CommandId);
-
-        #endregion
     }
 
     public DbSet<User> Users { set; get; }
@@ -77,4 +100,9 @@ public class ApplicationDbContext : IdentityDbContext<User>
     public DbSet<CommandInFunction> CommandInFunctions { set; get; }
     public DbSet<Function> Functions { set; get; }
     public DbSet<Permission> Permissions { set; get; }
+    public DbSet<Brand> Brands { get; set; }
+    public DbSet<Category> Categories { get; set; }
+    public DbSet<Order> Orders { get; set; }
+    public DbSet<OrderItem> OrderItems { get; set; }
+    public DbSet<Product> Products { get; set; }
 }

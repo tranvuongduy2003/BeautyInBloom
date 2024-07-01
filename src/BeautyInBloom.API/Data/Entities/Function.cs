@@ -1,26 +1,30 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using BeautyInBloom.API.Data.EntityBases;
 
 namespace BeautyInBloom.API.Data.Entities;
 
 [Table("Functions")]
-public class Function
+public class Function : EntityBase<string>
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [MaxLength(50)]
     [Column(TypeName = "varchar(50)")]
     public string Id { get; set; }
-
+    
     [Required]
     [MaxLength(200)]
     [Column(TypeName = "nvarchar(200)")]
     public string Name { get; set; }
 
-    [MaxLength(200)] [Required] public string Url { get; set; }
+    [Required]
+    [MaxLength(200)]
+    public string Url { get; set; }
 
-    [Required] public int SortOrder { get; set; }
+    [Required] 
+    public int SortOrder { get; set; }
 
     [MaxLength(50)]
     [Column(TypeName = "varchar(50)")]

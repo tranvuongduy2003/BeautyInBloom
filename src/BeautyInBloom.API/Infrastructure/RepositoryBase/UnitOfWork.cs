@@ -1,15 +1,23 @@
-﻿using BeautyInBloom.API.Infrastructure.Interfaces;
+﻿using BeautyInBloom.API.Data;
+using BeautyInBloom.API.Infrastructure.Interfaces;
+using BeautyInBloom.API.Repositories;
+using BeautyInBloom.API.Repositories.Contracts;
 using Microsoft.EntityFrameworkCore;
 
 namespace BeautyInBloom.API.Infrastructure.RepositoryBase;
 
-public class UnitOfWork<TContext> : IUnitOfWork<TContext> where TContext : DbContext
+public class UnitOfWork : IUnitOfWork
 {
-    private readonly TContext _context;
+    private readonly ApplicationDbContext _context;
 
-    public UnitOfWork(TContext context)
+    public IFunctionsRepository Functions { get; private set; }
+    public ICommandsRepository Commands { get; private set; }
+
+    public UnitOfWork(ApplicationDbContext context)
     {
         _context = context;
+        Functions = new FunctionsRepository(_context);
+        Commands = new CommandsRepository(_context);
     }
 
     public void Dispose() => _context.Dispose();

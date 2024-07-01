@@ -2,8 +2,9 @@
 
 namespace BeautyInBloom.API.Data.EntityBases;
 
-public class EntityAuditBase<T> : EntityBase<T>, IDateTracking
+public class EntityAuditBase<TKey> : EntityBase<TKey>, IDateTracking
 {
     public DateTime CreatedAt { get; set; }
+    
     public DateTime? UpdatedAt { get; set; }
 }

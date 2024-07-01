@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using BeautyInBloom.API.Data.EntityBases;
 
 namespace BeautyInBloom.API.Data.Entities;
 
@@ -15,14 +16,17 @@ public class Permission
         CommandId = commandId;
     }
 
+    [Required]
     [MaxLength(50)]
     [Column(TypeName = "varchar(50)")]
     public string FunctionId { get; set; }
 
+    [Required]
     [MaxLength(50)]
     [Column(TypeName = "varchar(50)")]
     public string RoleId { get; set; }
 
+    [Required]
     [MaxLength(50)]
     [Column(TypeName = "varchar(50)")]
     public string CommandId { get; set; }
