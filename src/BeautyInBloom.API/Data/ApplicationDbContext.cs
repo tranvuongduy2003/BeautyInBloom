@@ -47,6 +47,7 @@ public class ApplicationDbContext : IdentityDbContext<User>
         builder.Entity<Order>().Property(x => x.Id).HasMaxLength(50).IsUnicode(false);
         builder.Entity<OrderItem>().Property(x => x.Id).HasMaxLength(50).IsUnicode(false);
         builder.Entity<Product>().Property(x => x.Id).HasMaxLength(50).IsUnicode(false);
+        builder.Entity<Review>().Property(x => x.Id).HasMaxLength(50).IsUnicode(false);
 
         builder.Entity<CommandInFunction>()
             .HasOne(x => x.Function)
@@ -65,6 +66,15 @@ public class ApplicationDbContext : IdentityDbContext<User>
             .HasOne(x => x.Category)
             .WithMany(x => x.Products)
             .HasForeignKey(x => x.CategoryId);
+        
+        builder.Entity<Review>()
+            .HasOne(x => x.Product)
+            .WithMany(x => x.Reviews)
+            .HasForeignKey(x => x.ProductId);
+        builder.Entity<Review>()
+            .HasOne(x => x.User)
+            .WithMany(x => x.Reviews)
+            .HasForeignKey(x => x.UserId);
         
         builder.Entity<OrderItem>()
             .HasOne(x => x.Product)
@@ -105,4 +115,5 @@ public class ApplicationDbContext : IdentityDbContext<User>
     public DbSet<Order> Orders { get; set; }
     public DbSet<OrderItem> OrderItems { get; set; }
     public DbSet<Product> Products { get; set; }
+    public DbSet<Review> Reviews { get; set; }
 }
